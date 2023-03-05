@@ -54,9 +54,12 @@ def parse_args():
     parser.add_argument('-l', '--list')
     parser.add_argument('-ns', '--nuclei-severity')
     parser.add_argument('-o', '--output')
+    parser.add_argument('-esf', '--exclude_subfinder', default=False, action='store_true')
+    parser.add_argument('-eaf', '--exclude_assetfinder', default=False, action='store_true')
+    parser.add_argument('-eam', '--exclude_amass', default=False, action='store_true')
     return parser.parse_args()
 
-def main(type, domain, list, ns, output):
+def main(type, domain, list, ns, output, esf ,eaf, eam):
     if type == 'help' or type == 'h':
         print("OPTIONS:")
         print("  h, help                show this help message and exit")
@@ -72,13 +75,16 @@ def main(type, domain, list, ns, output):
         print("  se, subdomainenumeration        run subdomain enumeration from various tools")
         print("     -d, --domain string                target domain to scan")
         print("     -o, --output string                output file to write found issues/vulnerabilities")
+        print("     -esf, --exclude_subfinder          exclude subfinder to run")
+        print("     -eaf, --exclude_assetfinder        exclude assetfinder to run")
+        print("     -eam, --exclude_amass              exclude amass to run")
         print(" ")
 
     elif type == 'bn' or type == 'basicnuclei':
         bnrunner(domain, list, ns, output)
 
     elif type == 'se' or type == 'subdomainenumeration':
-        serunner(domain, output)
+        serunner(domain, output, esf, eaf, eam)
 
     elif type == 'a' or type == 'all':
         print("Scanning all")
@@ -90,8 +96,11 @@ def runner():
     list = args.list
     ns = args.nuclei_severity
     output = args.output
+    esf = args.exclude_subfinder
+    eaf = args.exclude_assetfinder
+    eam = args.exclude_amass
     banner()
-    res = main(type, domain, list, ns, output)
+    res = main(type, domain, list, ns, output, esf, eaf, eam)
 
 if __name__ == "__main__":
     runner()
