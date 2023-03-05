@@ -2,6 +2,7 @@ import sys
 import argparse
 
 from runner.basicnuclei import bnrunner
+from runner.subdomainenumeration import serunner
 
 is_windows = sys.platform.startswith('win')
 
@@ -50,26 +51,47 @@ def parse_args():
     parser.error = parser_error
     parser.add_argument('-t', '--type', required=True)
     parser.add_argument('-d', '--domain')
+    parser.add_argument('-l', '--list')
+    parser.add_argument('-ns', '--nuclei-severity')
+    parser.add_argument('-o', '--output')
     return parser.parse_args()
 
-def main(type):
+def main(type, domain, list, ns, output):
     if type == 'help' or type == 'h':
         print("OPTIONS:")
         print("  h, help                show this help message and exit")
         print(" ")
         print("BASIC SCAN:")
         print("  bn, basicnuclei        run basic nuclei scanning")
-        print("     -d, --domain string            target domain to scan")
+        print("     -d, --domain string                target domain to scan")
+        print("     -l, --list string                  path to file containing target domain to scan")
+        print("     -ns, --nuclei_severity value[]     display output based on severity. [info, low, medium, high, critical, unknown]")
+        print("     -o, --output string                output file to write found issues/vulnerabilities")
+        print("     -nt, --nuclei_template string[]    list of template or template directory to run(comma-seperated, file)")
+        print(" ")
+        print("  se, subdomainenumeration        run subdomain enumeration from various tools")
+        print("     -d, --domain string                target domain to scan")
+        print("     -o, --output string                output file to write found issues/vulnerabilities")
+        print(" ")
 
     elif type == 'bn' or type == 'basicnuclei':
-        bnrunner()
+        bnrunner(domain, list, ns, output)
+
+    elif type == 'se' or type == 'subdomainenumeration':
+        serunner(domain, output)
+
+    elif type == 'a' or type == 'all':
+        print("Scanning all")
 
 def runner():
     args = parse_args()
     type = args.type
     domain = args.domain
+    list = args.list
+    ns = args.nuclei_severity
+    output = args.output
     banner()
-    res = main(type)
+    res = main(type, domain, list, ns, output)
 
 if __name__ == "__main__":
     runner()
