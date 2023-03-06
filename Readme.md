@@ -1,4 +1,4 @@
-<h1 align="center">This tool is still under development, I can say it just only 5% done</h1>
+<h1 align="center">This tool is still under development</h1>
 
 <p align="center">
     <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.7+-blue.svg"></a>
